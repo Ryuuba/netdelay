@@ -1,4 +1,4 @@
-out/gcc-release//tictocpkt_m.o: tictocpkt_m.cc tictocpkt_m.h \
+out/gcc-release//pkt_m.o: pkt_m.cc pkt_m.h \
  /home/geo/omnetpp-6.0.1/include/omnetpp.h
-tictocpkt_m.h:
+pkt_m.h:
 /home/geo/omnetpp-6.0.1/include/omnetpp.h:

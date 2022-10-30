@@ -1,36 +1,12 @@
-//
-// This file is part of an OMNeT++/OMNEST simulation example.
-//
-// Copyright (C) 2003-2015 Andras Varga
-//
-// This file is distributed WITHOUT ANY WARRANTY. See the file
-// `license' for details on this and other legal matters.
-//
-
 import inet.node.ethernet.Eth10M;
+import Terminal;
 
-simple Txc18
-{
-    parameters:
-        @signal[arrival](type="long");
-        @statistic[hopCount](title="hop count"; source="arrival"; record=vector,stats; interpolationmode=none);
-        
-        @display("i=block/routing");
-    gates:
-        inout gate[];
-}
-
-
-network TicToc18
+network Pipeline
 {
     parameters:
         int numCentralNodes = default(2);
-    // types:
-    //     channel Channel extends ned.DelayChannel {
-    //         delay = 100ms;
-    //     }
     submodules:
-        tic[numCentralNodes+4]: Txc18;
+        tic[numCentralNodes+4]: Terminal;
     connections:
         // connect the 2 nodes in one side to the central nodes
         tic[0].gate++ <--> Eth10M {  length = 100m; } <--> tic[2].gate++;
