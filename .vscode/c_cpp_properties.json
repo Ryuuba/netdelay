@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${HOME}/omnetpp-6.0.1/include/**",
+                "${HOME}/inet4.4/src/inet/**",
+                "${workspaceFolder}"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/g++",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}
