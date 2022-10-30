@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgtool 6.0 from tictoc18.msg.
+// Generated file, do not edit! Created by opp_msgtool 6.0 from tictocpkt.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -28,7 +28,7 @@
 #include <sstream>
 #include <memory>
 #include <type_traits>
-#include "tictoc18_m.h"
+#include "tictocpkt_m.h"
 
 namespace omnetpp {
 
@@ -150,83 +150,96 @@ void doParsimUnpacking(omnetpp::cCommBuffer *, T& t)
 
 }  // namespace omnetpp
 
-Register_Class(TicTocMsg18)
+Register_Class(TicTocPkt)
 
-TicTocMsg18::TicTocMsg18(const char *name, short kind) : ::omnetpp::cMessage(name, kind)
+TicTocPkt::TicTocPkt(const char *name, short kind) : ::omnetpp::cPacket(name, kind)
 {
 }
 
-TicTocMsg18::TicTocMsg18(const TicTocMsg18& other) : ::omnetpp::cMessage(other)
+TicTocPkt::TicTocPkt(const TicTocPkt& other) : ::omnetpp::cPacket(other)
 {
     copy(other);
 }
 
-TicTocMsg18::~TicTocMsg18()
+TicTocPkt::~TicTocPkt()
 {
 }
 
-TicTocMsg18& TicTocMsg18::operator=(const TicTocMsg18& other)
+TicTocPkt& TicTocPkt::operator=(const TicTocPkt& other)
 {
     if (this == &other) return *this;
-    ::omnetpp::cMessage::operator=(other);
+    ::omnetpp::cPacket::operator=(other);
     copy(other);
     return *this;
 }
 
-void TicTocMsg18::copy(const TicTocMsg18& other)
+void TicTocPkt::copy(const TicTocPkt& other)
 {
     this->source = other.source;
     this->destination = other.destination;
     this->hopCount = other.hopCount;
+    this->receptionTime = other.receptionTime;
 }
 
-void TicTocMsg18::parsimPack(omnetpp::cCommBuffer *b) const
+void TicTocPkt::parsimPack(omnetpp::cCommBuffer *b) const
 {
-    ::omnetpp::cMessage::parsimPack(b);
+    ::omnetpp::cPacket::parsimPack(b);
     doParsimPacking(b,this->source);
     doParsimPacking(b,this->destination);
     doParsimPacking(b,this->hopCount);
+    doParsimPacking(b,this->receptionTime);
 }
 
-void TicTocMsg18::parsimUnpack(omnetpp::cCommBuffer *b)
+void TicTocPkt::parsimUnpack(omnetpp::cCommBuffer *b)
 {
-    ::omnetpp::cMessage::parsimUnpack(b);
+    ::omnetpp::cPacket::parsimUnpack(b);
     doParsimUnpacking(b,this->source);
     doParsimUnpacking(b,this->destination);
     doParsimUnpacking(b,this->hopCount);
+    doParsimUnpacking(b,this->receptionTime);
 }
 
-int TicTocMsg18::getSource() const
+int TicTocPkt::getSource() const
 {
     return this->source;
 }
 
-void TicTocMsg18::setSource(int source)
+void TicTocPkt::setSource(int source)
 {
     this->source = source;
 }
 
-int TicTocMsg18::getDestination() const
+int TicTocPkt::getDestination() const
 {
     return this->destination;
 }
 
-void TicTocMsg18::setDestination(int destination)
+void TicTocPkt::setDestination(int destination)
 {
     this->destination = destination;
 }
 
-int TicTocMsg18::getHopCount() const
+int TicTocPkt::getHopCount() const
 {
     return this->hopCount;
 }
 
-void TicTocMsg18::setHopCount(int hopCount)
+void TicTocPkt::setHopCount(int hopCount)
 {
     this->hopCount = hopCount;
 }
 
-class TicTocMsg18Descriptor : public omnetpp::cClassDescriptor
+double TicTocPkt::getReceptionTime() const
+{
+    return this->receptionTime;
+}
+
+void TicTocPkt::setReceptionTime(double receptionTime)
+{
+    this->receptionTime = receptionTime;
+}
+
+class TicTocPktDescriptor : public omnetpp::cClassDescriptor
 {
   private:
     mutable const char **propertyNames;
@@ -234,10 +247,11 @@ class TicTocMsg18Descriptor : public omnetpp::cClassDescriptor
         FIELD_source,
         FIELD_destination,
         FIELD_hopCount,
+        FIELD_receptionTime,
     };
   public:
-    TicTocMsg18Descriptor();
-    virtual ~TicTocMsg18Descriptor();
+    TicTocPktDescriptor();
+    virtual ~TicTocPktDescriptor();
 
     virtual bool doesSupport(omnetpp::cObject *obj) const override;
     virtual const char **getPropertyNames() const override;
@@ -263,24 +277,24 @@ class TicTocMsg18Descriptor : public omnetpp::cClassDescriptor
     virtual void setFieldStructValuePointer(omnetpp::any_ptr object, int field, int i, omnetpp::any_ptr ptr) const override;
 };
 
-Register_ClassDescriptor(TicTocMsg18Descriptor)
+Register_ClassDescriptor(TicTocPktDescriptor)
 
-TicTocMsg18Descriptor::TicTocMsg18Descriptor() : omnetpp::cClassDescriptor(omnetpp::opp_typename(typeid(TicTocMsg18)), "omnetpp::cMessage")
+TicTocPktDescriptor::TicTocPktDescriptor() : omnetpp::cClassDescriptor(omnetpp::opp_typename(typeid(TicTocPkt)), "omnetpp::cPacket")
 {
     propertyNames = nullptr;
 }
 
-TicTocMsg18Descriptor::~TicTocMsg18Descriptor()
+TicTocPktDescriptor::~TicTocPktDescriptor()
 {
     delete[] propertyNames;
 }
 
-bool TicTocMsg18Descriptor::doesSupport(omnetpp::cObject *obj) const
+bool TicTocPktDescriptor::doesSupport(omnetpp::cObject *obj) const
 {
-    return dynamic_cast<TicTocMsg18 *>(obj)!=nullptr;
+    return dynamic_cast<TicTocPkt *>(obj)!=nullptr;
 }
 
-const char **TicTocMsg18Descriptor::getPropertyNames() const
+const char **TicTocPktDescriptor::getPropertyNames() const
 {
     if (!propertyNames) {
         static const char *names[] = {  nullptr };
@@ -291,19 +305,19 @@ const char **TicTocMsg18Descriptor::getPropertyNames() const
     return propertyNames;
 }
 
-const char *TicTocMsg18Descriptor::getProperty(const char *propertyName) const
+const char *TicTocPktDescriptor::getProperty(const char *propertyName) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     return base ? base->getProperty(propertyName) : nullptr;
 }
 
-int TicTocMsg18Descriptor::getFieldCount() const
+int TicTocPktDescriptor::getFieldCount() const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
-    return base ? 3+base->getFieldCount() : 3;
+    return base ? 4+base->getFieldCount() : 4;
 }
 
-unsigned int TicTocMsg18Descriptor::getFieldTypeFlags(int field) const
+unsigned int TicTocPktDescriptor::getFieldTypeFlags(int field) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     if (base) {
@@ -315,11 +329,12 @@ unsigned int TicTocMsg18Descriptor::getFieldTypeFlags(int field) const
         FD_ISEDITABLE,    // FIELD_source
         FD_ISEDITABLE,    // FIELD_destination
         FD_ISEDITABLE,    // FIELD_hopCount
+        FD_ISEDITABLE,    // FIELD_receptionTime
     };
-    return (field >= 0 && field < 3) ? fieldTypeFlags[field] : 0;
+    return (field >= 0 && field < 4) ? fieldTypeFlags[field] : 0;
 }
 
-const char *TicTocMsg18Descriptor::getFieldName(int field) const
+const char *TicTocPktDescriptor::getFieldName(int field) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     if (base) {
@@ -331,21 +346,23 @@ const char *TicTocMsg18Descriptor::getFieldName(int field) const
         "source",
         "destination",
         "hopCount",
+        "receptionTime",
     };
-    return (field >= 0 && field < 3) ? fieldNames[field] : nullptr;
+    return (field >= 0 && field < 4) ? fieldNames[field] : nullptr;
 }
 
-int TicTocMsg18Descriptor::findField(const char *fieldName) const
+int TicTocPktDescriptor::findField(const char *fieldName) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     int baseIndex = base ? base->getFieldCount() : 0;
     if (strcmp(fieldName, "source") == 0) return baseIndex + 0;
     if (strcmp(fieldName, "destination") == 0) return baseIndex + 1;
     if (strcmp(fieldName, "hopCount") == 0) return baseIndex + 2;
+    if (strcmp(fieldName, "receptionTime") == 0) return baseIndex + 3;
     return base ? base->findField(fieldName) : -1;
 }
 
-const char *TicTocMsg18Descriptor::getFieldTypeString(int field) const
+const char *TicTocPktDescriptor::getFieldTypeString(int field) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     if (base) {
@@ -357,11 +374,12 @@ const char *TicTocMsg18Descriptor::getFieldTypeString(int field) const
         "int",    // FIELD_source
         "int",    // FIELD_destination
         "int",    // FIELD_hopCount
+        "double",    // FIELD_receptionTime
     };
-    return (field >= 0 && field < 3) ? fieldTypeStrings[field] : nullptr;
+    return (field >= 0 && field < 4) ? fieldTypeStrings[field] : nullptr;
 }
 
-const char **TicTocMsg18Descriptor::getFieldPropertyNames(int field) const
+const char **TicTocPktDescriptor::getFieldPropertyNames(int field) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     if (base) {
@@ -374,7 +392,7 @@ const char **TicTocMsg18Descriptor::getFieldPropertyNames(int field) const
     }
 }
 
-const char *TicTocMsg18Descriptor::getFieldProperty(int field, const char *propertyName) const
+const char *TicTocPktDescriptor::getFieldProperty(int field, const char *propertyName) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     if (base) {
@@ -387,7 +405,7 @@ const char *TicTocMsg18Descriptor::getFieldProperty(int field, const char *prope
     }
 }
 
-int TicTocMsg18Descriptor::getFieldArraySize(omnetpp::any_ptr object, int field) const
+int TicTocPktDescriptor::getFieldArraySize(omnetpp::any_ptr object, int field) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     if (base) {
@@ -395,13 +413,13 @@ int TicTocMsg18Descriptor::getFieldArraySize(omnetpp::any_ptr object, int field)
             return base->getFieldArraySize(object, field);
         field -= base->getFieldCount();
     }
-    TicTocMsg18 *pp = omnetpp::fromAnyPtr<TicTocMsg18>(object); (void)pp;
+    TicTocPkt *pp = omnetpp::fromAnyPtr<TicTocPkt>(object); (void)pp;
     switch (field) {
         default: return 0;
     }
 }
 
-void TicTocMsg18Descriptor::setFieldArraySize(omnetpp::any_ptr object, int field, int size) const
+void TicTocPktDescriptor::setFieldArraySize(omnetpp::any_ptr object, int field, int size) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     if (base) {
@@ -411,13 +429,13 @@ void TicTocMsg18Descriptor::setFieldArraySize(omnetpp::any_ptr object, int field
         }
         field -= base->getFieldCount();
     }
-    TicTocMsg18 *pp = omnetpp::fromAnyPtr<TicTocMsg18>(object); (void)pp;
+    TicTocPkt *pp = omnetpp::fromAnyPtr<TicTocPkt>(object); (void)pp;
     switch (field) {
-        default: throw omnetpp::cRuntimeError("Cannot set array size of field %d of class 'TicTocMsg18'", field);
+        default: throw omnetpp::cRuntimeError("Cannot set array size of field %d of class 'TicTocPkt'", field);
     }
 }
 
-const char *TicTocMsg18Descriptor::getFieldDynamicTypeString(omnetpp::any_ptr object, int field, int i) const
+const char *TicTocPktDescriptor::getFieldDynamicTypeString(omnetpp::any_ptr object, int field, int i) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     if (base) {
@@ -425,13 +443,13 @@ const char *TicTocMsg18Descriptor::getFieldDynamicTypeString(omnetpp::any_ptr ob
             return base->getFieldDynamicTypeString(object,field,i);
         field -= base->getFieldCount();
     }
-    TicTocMsg18 *pp = omnetpp::fromAnyPtr<TicTocMsg18>(object); (void)pp;
+    TicTocPkt *pp = omnetpp::fromAnyPtr<TicTocPkt>(object); (void)pp;
     switch (field) {
         default: return nullptr;
     }
 }
 
-std::string TicTocMsg18Descriptor::getFieldValueAsString(omnetpp::any_ptr object, int field, int i) const
+std::string TicTocPktDescriptor::getFieldValueAsString(omnetpp::any_ptr object, int field, int i) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     if (base) {
@@ -439,16 +457,17 @@ std::string TicTocMsg18Descriptor::getFieldValueAsString(omnetpp::any_ptr object
             return base->getFieldValueAsString(object,field,i);
         field -= base->getFieldCount();
     }
-    TicTocMsg18 *pp = omnetpp::fromAnyPtr<TicTocMsg18>(object); (void)pp;
+    TicTocPkt *pp = omnetpp::fromAnyPtr<TicTocPkt>(object); (void)pp;
     switch (field) {
         case FIELD_source: return long2string(pp->getSource());
         case FIELD_destination: return long2string(pp->getDestination());
         case FIELD_hopCount: return long2string(pp->getHopCount());
+        case FIELD_receptionTime: return double2string(pp->getReceptionTime());
         default: return "";
     }
 }
 
-void TicTocMsg18Descriptor::setFieldValueAsString(omnetpp::any_ptr object, int field, int i, const char *value) const
+void TicTocPktDescriptor::setFieldValueAsString(omnetpp::any_ptr object, int field, int i, const char *value) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     if (base) {
@@ -458,16 +477,17 @@ void TicTocMsg18Descriptor::setFieldValueAsString(omnetpp::any_ptr object, int f
         }
         field -= base->getFieldCount();
     }
-    TicTocMsg18 *pp = omnetpp::fromAnyPtr<TicTocMsg18>(object); (void)pp;
+    TicTocPkt *pp = omnetpp::fromAnyPtr<TicTocPkt>(object); (void)pp;
     switch (field) {
         case FIELD_source: pp->setSource(string2long(value)); break;
         case FIELD_destination: pp->setDestination(string2long(value)); break;
         case FIELD_hopCount: pp->setHopCount(string2long(value)); break;
-        default: throw omnetpp::cRuntimeError("Cannot set field %d of class 'TicTocMsg18'", field);
+        case FIELD_receptionTime: pp->setReceptionTime(string2double(value)); break;
+        default: throw omnetpp::cRuntimeError("Cannot set field %d of class 'TicTocPkt'", field);
     }
 }
 
-omnetpp::cValue TicTocMsg18Descriptor::getFieldValue(omnetpp::any_ptr object, int field, int i) const
+omnetpp::cValue TicTocPktDescriptor::getFieldValue(omnetpp::any_ptr object, int field, int i) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     if (base) {
@@ -475,16 +495,17 @@ omnetpp::cValue TicTocMsg18Descriptor::getFieldValue(omnetpp::any_ptr object, in
             return base->getFieldValue(object,field,i);
         field -= base->getFieldCount();
     }
-    TicTocMsg18 *pp = omnetpp::fromAnyPtr<TicTocMsg18>(object); (void)pp;
+    TicTocPkt *pp = omnetpp::fromAnyPtr<TicTocPkt>(object); (void)pp;
     switch (field) {
         case FIELD_source: return pp->getSource();
         case FIELD_destination: return pp->getDestination();
         case FIELD_hopCount: return pp->getHopCount();
-        default: throw omnetpp::cRuntimeError("Cannot return field %d of class 'TicTocMsg18' as cValue -- field index out of range?", field);
+        case FIELD_receptionTime: return pp->getReceptionTime();
+        default: throw omnetpp::cRuntimeError("Cannot return field %d of class 'TicTocPkt' as cValue -- field index out of range?", field);
     }
 }
 
-void TicTocMsg18Descriptor::setFieldValue(omnetpp::any_ptr object, int field, int i, const omnetpp::cValue& value) const
+void TicTocPktDescriptor::setFieldValue(omnetpp::any_ptr object, int field, int i, const omnetpp::cValue& value) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     if (base) {
@@ -494,16 +515,17 @@ void TicTocMsg18Descriptor::setFieldValue(omnetpp::any_ptr object, int field, in
         }
         field -= base->getFieldCount();
     }
-    TicTocMsg18 *pp = omnetpp::fromAnyPtr<TicTocMsg18>(object); (void)pp;
+    TicTocPkt *pp = omnetpp::fromAnyPtr<TicTocPkt>(object); (void)pp;
     switch (field) {
         case FIELD_source: pp->setSource(omnetpp::checked_int_cast<int>(value.intValue())); break;
         case FIELD_destination: pp->setDestination(omnetpp::checked_int_cast<int>(value.intValue())); break;
         case FIELD_hopCount: pp->setHopCount(omnetpp::checked_int_cast<int>(value.intValue())); break;
-        default: throw omnetpp::cRuntimeError("Cannot set field %d of class 'TicTocMsg18'", field);
+        case FIELD_receptionTime: pp->setReceptionTime(value.doubleValue()); break;
+        default: throw omnetpp::cRuntimeError("Cannot set field %d of class 'TicTocPkt'", field);
     }
 }
 
-const char *TicTocMsg18Descriptor::getFieldStructName(int field) const
+const char *TicTocPktDescriptor::getFieldStructName(int field) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     if (base) {
@@ -516,7 +538,7 @@ const char *TicTocMsg18Descriptor::getFieldStructName(int field) const
     };
 }
 
-omnetpp::any_ptr TicTocMsg18Descriptor::getFieldStructValuePointer(omnetpp::any_ptr object, int field, int i) const
+omnetpp::any_ptr TicTocPktDescriptor::getFieldStructValuePointer(omnetpp::any_ptr object, int field, int i) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     if (base) {
@@ -524,13 +546,13 @@ omnetpp::any_ptr TicTocMsg18Descriptor::getFieldStructValuePointer(omnetpp::any_
             return base->getFieldStructValuePointer(object, field, i);
         field -= base->getFieldCount();
     }
-    TicTocMsg18 *pp = omnetpp::fromAnyPtr<TicTocMsg18>(object); (void)pp;
+    TicTocPkt *pp = omnetpp::fromAnyPtr<TicTocPkt>(object); (void)pp;
     switch (field) {
         default: return omnetpp::any_ptr(nullptr);
     }
 }
 
-void TicTocMsg18Descriptor::setFieldStructValuePointer(omnetpp::any_ptr object, int field, int i, omnetpp::any_ptr ptr) const
+void TicTocPktDescriptor::setFieldStructValuePointer(omnetpp::any_ptr object, int field, int i, omnetpp::any_ptr ptr) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     if (base) {
@@ -540,9 +562,9 @@ void TicTocMsg18Descriptor::setFieldStructValuePointer(omnetpp::any_ptr object, 
         }
         field -= base->getFieldCount();
     }
-    TicTocMsg18 *pp = omnetpp::fromAnyPtr<TicTocMsg18>(object); (void)pp;
+    TicTocPkt *pp = omnetpp::fromAnyPtr<TicTocPkt>(object); (void)pp;
     switch (field) {
-        default: throw omnetpp::cRuntimeError("Cannot set field %d of class 'TicTocMsg18'", field);
+        default: throw omnetpp::cRuntimeError("Cannot set field %d of class 'TicTocPkt'", field);
     }
 }
 

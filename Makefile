@@ -2,11 +2,10 @@
 # OMNeT++/OMNEST Makefile for netdelay
 #
 # This file was generated with the command:
-#  opp_makemake
+#  opp_makemake -f
 #
 
 # Name of target to be created (-o option)
-INETDIR = $(HOME)/inet4.4
 TARGET_DIR = .
 TARGET_NAME = netdelay$(D)
 TARGET = $(TARGET_NAME)$(EXE_SUFFIX)
@@ -20,13 +19,13 @@ USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(QTENV_LIBS) $(CMDENV_LIBS)
 #USERIF_LIBS = $(QTENV_LIBS)
 
 # C++ include paths (with -I)
-INCLUDE_PATH = 
+INCLUDE_PATH =
 
 # Additional object and library files to link with
 EXTRA_OBJS =
 
 # Additional libraries (-L, -l options)
-LIBS = 
+LIBS =
 
 # Output directory
 PROJECT_OUTPUT_DIR = out
@@ -34,11 +33,11 @@ PROJECTRELATIVE_PATH =
 O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
-OBJS = $O/txc18.o $O/tictoc18_m.o
+OBJS = $O/txc18.o $O/tictocpkt_m.o
 
 # Message files
 MSGFILES = \
-    tictoc18.msg
+    tictocpkt.msg
 
 # SM files
 SMFILES =

@@ -12,10 +12,11 @@
 //
 // Same as TictocMsg11
 //
-message TicTocMsg18
+packet TicTocPkt
 {
     int source;
     int destination;
     int hopCount = 0;
+    double receptionTime = 0.0;
 }
 

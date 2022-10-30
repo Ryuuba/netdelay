@@ -8,10 +8,9 @@
 // `license' for details on this and other legal matters.
 //
 
-#include <stdio.h>
 #include <string.h>
 #include <omnetpp.h>
-#include "tictoc18_m.h"
+#include "tictocpkt_m.h"
 
 using namespace omnetpp;
 
@@ -39,10 +38,10 @@ class Txc18 : public cSimpleModule
     simsignal_t arrivalSignal;
 
   protected:
-    virtual TicTocMsg18 *generateMessage();
-    virtual void forwardMessage(TicTocMsg18 *msg);
+    virtual TicTocPkt* generatePkt();
+    virtual void forwardPkt(TicTocPkt*);
     virtual void initialize() override;
-    virtual void handleMessage(cMessage *msg) override;
+    virtual void handleMessage(cMessage*) override;
 };
 
 Define_Module(Txc18);
@@ -53,39 +52,40 @@ void Txc18::initialize()
     // Module 0 sends the first message
     if (getIndex() == 0) {
         // Boot the process scheduling the initial message as a self-message.
-        TicTocMsg18 *msg = generateMessage();
-        scheduleAt(0.0, msg);
+        TicTocPkt* pkt = generatePkt();
+        pkt->setBitLength(10000000);
+        scheduleAt(0.0, pkt);
     }
 }
 
 void Txc18::handleMessage(cMessage *msg)
 {
-    TicTocMsg18 *ttmsg = check_and_cast<TicTocMsg18 *>(msg);
+    TicTocPkt *ttpkt = check_and_cast<TicTocPkt*>(msg);
 
-    if (ttmsg->getDestination() == getIndex()) {
+    if (ttpkt->getDestination() == getIndex()) {
         // Message arrived
-        int hopcount = ttmsg->getHopCount();
+        int hopcount = ttpkt->getHopCount();
         // send a signal
         emit(arrivalSignal, hopcount);
 
-        EV << "Message " << ttmsg << " arrived after " << hopcount << " hops.\n";
+        EV << "Message " << ttpkt << " arrived after " << hopcount << " hops.\n";
         bubble("ARRIVED, starting new one!");
 
-        delete ttmsg;
+        delete ttpkt;
 
         // Generate another one.
         EV << "Generating another message: ";
-        TicTocMsg18 *newmsg = generateMessage();
-        EV << newmsg << endl;
-        forwardMessage(newmsg);
+        TicTocPkt *newpkt = generatePkt();
+        EV << newpkt << endl;
+        forwardPkt(newpkt);
     }
     else {
         // We need to forward the message.
-        forwardMessage(ttmsg);
+        forwardPkt(ttpkt);
     }
 }
 
-TicTocMsg18 *Txc18::generateMessage()
+TicTocPkt *Txc18::generatePkt()
 {
     // Produce source and destination addresses.
     int src = getIndex();
@@ -94,26 +94,26 @@ TicTocMsg18 *Txc18::generateMessage()
     if (dest >= src)
         dest++;
 
-    char msgname[20];
-    sprintf(msgname, "tic-%d-to-%d", src, dest);
+    char pktname[20];
+    sprintf(pktname, "tic-%d-to-%d", src, dest);
 
     // Create message object and set source and destination field.
-    TicTocMsg18 *msg = new TicTocMsg18(msgname);
-    msg->setSource(src);
-    msg->setDestination(dest);
-    return msg;
+    TicTocPkt *pkt = new TicTocPkt(pktname);
+    pkt->setSource(src);
+    pkt->setDestination(dest);
+    return pkt;
 }
 
-void Txc18::forwardMessage(TicTocMsg18 *msg)
+void Txc18::forwardPkt(TicTocPkt *pkt)
 {
     // Increment hop count.
-    msg->setHopCount(msg->getHopCount()+1);
+    pkt->setHopCount(pkt->getHopCount()+1);
 
     // Same routing as before: random gate.
     int n = gateSize("gate");
     int k = intuniform(0, n-1);
 
-    EV << "Forwarding message " << msg << " on gate[" << k << "]\n";
-    send(msg, "gate$o", k);
+    EV << "Forwarding message " << pkt << " on gate[" << k << "]\n";
+    send(pkt, "gate$o", k);
 }
 
