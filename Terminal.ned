@@ -1,20 +1,16 @@
-//
-// This file is part of an OMNeT++/OMNEST simulation example.
-//
-// Copyright (C) 2003-2015 Andras Varga
-//
-// This file is distributed WITHOUT ANY WARRANTY. See the file
-// `license' for details on this and other legal matters.
-//
-
 simple Terminal
 {
     parameters:
+        int pktNumber = default(0);
+        bool isSource = default(false);
+        int pktSize @unit(Mb) = default(10Mb);
+        simtime_t processingDelay @unit(us) = default(50us);
         @signal[arrival](type="simtime_t");
-        @statistic[hopCount](title="delay"; source="arrival"; record=vector,stats; interpolationmode=none);
-        @display("i=block/routing");
+        @statistic[delay](title="delay"; source="arrival"; record=vector,stats; interpolationmode=none);
+        @display("i=device/laptop");
     gates:
-        inout gate[];
+        input in @loose;
+        output out @loose;
 }
 
 

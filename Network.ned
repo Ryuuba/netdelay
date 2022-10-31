@@ -1,21 +1,19 @@
 import inet.node.ethernet.Eth10M;
 import Terminal;
+import Relay;
 
 network Pipeline
 {
-    parameters:
-        int numCentralNodes = default(2);
     submodules:
-        tic[numCentralNodes+4]: Terminal;
-    connections:
-        // connect the 2 nodes in one side to the central nodes
-        tic[0].gate++ <--> Eth10M {  length = 100m; } <--> tic[2].gate++;
-        tic[1].gate++ <--> Eth10M {  length = 100m; } <--> tic[2].gate++;
-        // connect the central nodes together
-        for i=2..numCentralNodes+1 {
-            tic[i].gate++ <--> Eth10M {  length = 100m; } <--> tic[i+1].gate++;
+        source: Terminal {
+            pktNumber = 100;
+            isSource = true;
         }
-        // connect the 2 nodes on the other side to the central nodes
-        tic[numCentralNodes+2].gate++ <--> Eth10M {  length = 100m; } <--> tic[numCentralNodes+1].gate++;
-        tic[numCentralNodes+3].gate++ <--> Eth10M {  length = 100m; } <--> tic[numCentralNodes+1].gate++;
+        receptor: Terminal;
+        relay[3]: Relay;
+    connections:
+        source.out --> Eth10M { length = 100m; } --> relay[0].in;
+        relay[0].out --> Eth10M { length = 100m; } --> relay[1].in;
+        relay[1].out --> Eth10M { length = 100m; } --> relay[2].in;
+        relay[2].out --> Eth10M { length = 100m; } --> receptor.in;
 }

@@ -1,8 +1,6 @@
 
 packet Pkt
 {
-    int source;
-    int destination;
-    simtime_t receptionTime = 0.0;
+    simtime_t genTime = 0.0;
 }
 

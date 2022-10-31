@@ -17,5 +17,9 @@
         "titleBar.activeForeground": "#15202b",
         "titleBar.inactiveBackground": "#ffc00099",
         "titleBar.inactiveForeground": "#15202b99"
+    },
+    "files.associations": {
+        "ostream": "cpp",
+        "new": "cpp"
     }
 }

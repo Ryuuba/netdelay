@@ -175,55 +175,29 @@ Pkt& Pkt::operator=(const Pkt& other)
 
 void Pkt::copy(const Pkt& other)
 {
-    this->source = other.source;
-    this->destination = other.destination;
-    this->receptionTime = other.receptionTime;
+    this->genTime = other.genTime;
 }
 
 void Pkt::parsimPack(omnetpp::cCommBuffer *b) const
 {
     ::omnetpp::cPacket::parsimPack(b);
-    doParsimPacking(b,this->source);
-    doParsimPacking(b,this->destination);
-    doParsimPacking(b,this->receptionTime);
+    doParsimPacking(b,this->genTime);
 }
 
 void Pkt::parsimUnpack(omnetpp::cCommBuffer *b)
 {
     ::omnetpp::cPacket::parsimUnpack(b);
-    doParsimUnpacking(b,this->source);
-    doParsimUnpacking(b,this->destination);
-    doParsimUnpacking(b,this->receptionTime);
+    doParsimUnpacking(b,this->genTime);
 }
 
-int Pkt::getSource() const
+omnetpp::simtime_t Pkt::getGenTime() const
 {
-    return this->source;
+    return this->genTime;
 }
 
-void Pkt::setSource(int source)
+void Pkt::setGenTime(omnetpp::simtime_t genTime)
 {
-    this->source = source;
-}
-
-int Pkt::getDestination() const
-{
-    return this->destination;
-}
-
-void Pkt::setDestination(int destination)
-{
-    this->destination = destination;
-}
-
-omnetpp::simtime_t Pkt::getReceptionTime() const
-{
-    return this->receptionTime;
-}
-
-void Pkt::setReceptionTime(omnetpp::simtime_t receptionTime)
-{
-    this->receptionTime = receptionTime;
+    this->genTime = genTime;
 }
 
 class PktDescriptor : public omnetpp::cClassDescriptor
@@ -231,9 +205,7 @@ class PktDescriptor : public omnetpp::cClassDescriptor
   private:
     mutable const char **propertyNames;
     enum FieldConstants {
-        FIELD_source,
-        FIELD_destination,
-        FIELD_receptionTime,
+        FIELD_genTime,
     };
   public:
     PktDescriptor();
@@ -300,7 +272,7 @@ const char *PktDescriptor::getProperty(const char *propertyName) const
 int PktDescriptor::getFieldCount() const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
-    return base ? 3+base->getFieldCount() : 3;
+    return base ? 1+base->getFieldCount() : 1;
 }
 
 unsigned int PktDescriptor::getFieldTypeFlags(int field) const
@@ -312,11 +284,9 @@ unsigned int PktDescriptor::getFieldTypeFlags(int field) const
         field -= base->getFieldCount();
     }
     static unsigned int fieldTypeFlags[] = {
-        FD_ISEDITABLE,    // FIELD_source
-        FD_ISEDITABLE,    // FIELD_destination
-        FD_ISEDITABLE,    // FIELD_receptionTime
+        FD_ISEDITABLE,    // FIELD_genTime
     };
-    return (field >= 0 && field < 3) ? fieldTypeFlags[field] : 0;
+    return (field >= 0 && field < 1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PktDescriptor::getFieldName(int field) const
@@ -328,20 +298,16 @@ const char *PktDescriptor::getFieldName(int field) const
         field -= base->getFieldCount();
     }
     static const char *fieldNames[] = {
-        "source",
-        "destination",
-        "receptionTime",
+        "genTime",
     };
-    return (field >= 0 && field < 3) ? fieldNames[field] : nullptr;
+    return (field >= 0 && field < 1) ? fieldNames[field] : nullptr;
 }
 
 int PktDescriptor::findField(const char *fieldName) const
 {
     omnetpp::cClassDescriptor *base = getBaseClassDescriptor();
     int baseIndex = base ? base->getFieldCount() : 0;
-    if (strcmp(fieldName, "source") == 0) return baseIndex + 0;
-    if (strcmp(fieldName, "destination") == 0) return baseIndex + 1;
-    if (strcmp(fieldName, "receptionTime") == 0) return baseIndex + 2;
+    if (strcmp(fieldName, "genTime") == 0) return baseIndex + 0;
     return base ? base->findField(fieldName) : -1;
 }
 
@@ -354,11 +320,9 @@ const char *PktDescriptor::getFieldTypeString(int field) const
         field -= base->getFieldCount();
     }
     static const char *fieldTypeStrings[] = {
-        "int",    // FIELD_source
-        "int",    // FIELD_destination
-        "omnetpp::simtime_t",    // FIELD_receptionTime
+        "omnetpp::simtime_t",    // FIELD_genTime
     };
-    return (field >= 0 && field < 3) ? fieldTypeStrings[field] : nullptr;
+    return (field >= 0 && field < 1) ? fieldTypeStrings[field] : nullptr;
 }
 
 const char **PktDescriptor::getFieldPropertyNames(int field) const
@@ -441,9 +405,7 @@ std::string PktDescriptor::getFieldValueAsString(omnetpp::any_ptr object, int fi
     }
     Pkt *pp = omnetpp::fromAnyPtr<Pkt>(object); (void)pp;
     switch (field) {
-        case FIELD_source: return long2string(pp->getSource());
-        case FIELD_destination: return long2string(pp->getDestination());
-        case FIELD_receptionTime: return simtime2string(pp->getReceptionTime());
+        case FIELD_genTime: return simtime2string(pp->getGenTime());
         default: return "";
     }
 }
@@ -460,9 +422,7 @@ void PktDescriptor::setFieldValueAsString(omnetpp::any_ptr object, int field, in
     }
     Pkt *pp = omnetpp::fromAnyPtr<Pkt>(object); (void)pp;
     switch (field) {
-        case FIELD_source: pp->setSource(string2long(value)); break;
-        case FIELD_destination: pp->setDestination(string2long(value)); break;
-        case FIELD_receptionTime: pp->setReceptionTime(string2simtime(value)); break;
+        case FIELD_genTime: pp->setGenTime(string2simtime(value)); break;
         default: throw omnetpp::cRuntimeError("Cannot set field %d of class 'Pkt'", field);
     }
 }
@@ -477,9 +437,7 @@ omnetpp::cValue PktDescriptor::getFieldValue(omnetpp::any_ptr object, int field,
     }
     Pkt *pp = omnetpp::fromAnyPtr<Pkt>(object); (void)pp;
     switch (field) {
-        case FIELD_source: return pp->getSource();
-        case FIELD_destination: return pp->getDestination();
-        case FIELD_receptionTime: return pp->getReceptionTime().dbl();
+        case FIELD_genTime: return pp->getGenTime().dbl();
         default: throw omnetpp::cRuntimeError("Cannot return field %d of class 'Pkt' as cValue -- field index out of range?", field);
     }
 }
@@ -496,9 +454,7 @@ void PktDescriptor::setFieldValue(omnetpp::any_ptr object, int field, int i, con
     }
     Pkt *pp = omnetpp::fromAnyPtr<Pkt>(object); (void)pp;
     switch (field) {
-        case FIELD_source: pp->setSource(omnetpp::checked_int_cast<int>(value.intValue())); break;
-        case FIELD_destination: pp->setDestination(omnetpp::checked_int_cast<int>(value.intValue())); break;
-        case FIELD_receptionTime: pp->setReceptionTime(value.doubleValue()); break;
+        case FIELD_genTime: pp->setGenTime(value.doubleValue()); break;
         default: throw omnetpp::cRuntimeError("Cannot set field %d of class 'Pkt'", field);
     }
 }

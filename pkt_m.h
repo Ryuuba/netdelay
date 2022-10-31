@@ -22,18 +22,14 @@ class Pkt;
  * <pre>
  * packet Pkt
  * {
- *     int source;
- *     int destination;
- *     simtime_t receptionTime = 0.0;
+ *     simtime_t genTime = 0.0;
  * }
  * </pre>
  */
 class Pkt : public ::omnetpp::cPacket
 {
   protected:
-    int source = 0;
-    int destination = 0;
-    omnetpp::simtime_t receptionTime = 0.0;
+    omnetpp::simtime_t genTime = 0.0;
 
   private:
     void copy(const Pkt& other);
@@ -50,14 +46,8 @@ class Pkt : public ::omnetpp::cPacket
     virtual void parsimPack(omnetpp::cCommBuffer *b) const override;
     virtual void parsimUnpack(omnetpp::cCommBuffer *b) override;
 
-    virtual int getSource() const;
-    virtual void setSource(int source);
-
-    virtual int getDestination() const;
-    virtual void setDestination(int destination);
-
-    virtual omnetpp::simtime_t getReceptionTime() const;
-    virtual void setReceptionTime(omnetpp::simtime_t receptionTime);
+    virtual omnetpp::simtime_t getGenTime() const;
+    virtual void setGenTime(omnetpp::simtime_t genTime);
 };
 
 inline void doParsimPacking(omnetpp::cCommBuffer *b, const Pkt& obj) {obj.parsimPack(b);}
