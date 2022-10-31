@@ -5,15 +5,21 @@
 #include <omnetpp.h>
 #include "pkt_m.h"
 
-class Terminal : public omnetpp::cSimpleModule
+class Terminal 
+    : public omnetpp::cSimpleModule
+    , public omnetpp::cListener
 {
-  private:
-    static omnetpp::simsignal_t arrivalSignal;
-    omnetpp::simtime_t processingDelay;
+    private:
+        static omnetpp::simsignal_t arrivalSignal;
+        static omnetpp::simsignal_t fwdSignal;
+        omnetpp::simtime_t processingDelay;
     int pktNumber;
-  protected:
-    virtual void initialize() override;
-    virtual void handleMessage(omnetpp::cMessage*) override;
+    public:
+        Terminal();
+        ~Terminal();
+        virtual void initialize() override;
+        virtual void handleMessage(omnetpp::cMessage*) override;
+        virtual void receiveSignal (omnetpp::cComponent*, omnetpp::simsignal_t, const omnetpp::SimTime&, omnetpp::cObject*);
 };
 
 #endif // TERMINAL_H

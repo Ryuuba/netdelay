@@ -22,14 +22,16 @@ class Pkt;
  * <pre>
  * packet Pkt
  * {
- *     simtime_t genTime = 0.0;
+ *     simtime_t genTime;
+ *     int number;
  * }
  * </pre>
  */
 class Pkt : public ::omnetpp::cPacket
 {
   protected:
-    omnetpp::simtime_t genTime = 0.0;
+    omnetpp::simtime_t genTime = SIMTIME_ZERO;
+    int number = 0;
 
   private:
     void copy(const Pkt& other);
@@ -48,6 +50,9 @@ class Pkt : public ::omnetpp::cPacket
 
     virtual omnetpp::simtime_t getGenTime() const;
     virtual void setGenTime(omnetpp::simtime_t genTime);
+
+    virtual int getNumber() const;
+    virtual void setNumber(int number);
 };
 
 inline void doParsimPacking(omnetpp::cCommBuffer *b, const Pkt& obj) {obj.parsimPack(b);}
