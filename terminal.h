@@ -10,6 +10,7 @@ class Terminal : public omnetpp::cSimpleModule
   private:
     static omnetpp::simsignal_t arrivalSignal;
     omnetpp::simtime_t processingDelay;
+    int pktNumber;
   protected:
     virtual void initialize() override;
     virtual void handleMessage(omnetpp::cMessage*) override;

@@ -10,6 +10,7 @@ void Terminal::initialize()
 {
     processingDelay = par("processingDelay");
     if (strcmp(getName(), "source") == 0) {
+        pktNumber = par("pktNumber");
         Pkt* pkt = new Pkt("pkt");
         int pktSize = par("pktSize");
         pkt->setBitLength(pktSize);
@@ -23,6 +24,9 @@ void Terminal::handleMessage(cMessage* msg)
     if (pkt->isSelfMessage()) {
         pkt->setGenTime(simTime());
         send(pkt, "out");
+        pktNumber--;
+        if (pktNumber == 0)
+            endSimulation();
     }
     else if (strcmp(getName(), "receptor") == 0) {
         auto delay = simTime() - pkt->getGenTime() + processingDelay;
