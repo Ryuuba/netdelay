@@ -6,7 +6,7 @@ network Pipeline
 {
     submodules:
         source: Terminal {
-            pktNumber = 100;
+            pktNumber = 10;
             isSource = true;
         }
         receptor: Terminal;
