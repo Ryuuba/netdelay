@@ -9,12 +9,13 @@ simsignal_t Terminal::fwdSignal = registerSignal("fwd");
 
 Terminal::Terminal()
     : processingDelay(0.0)
+    , procDelay(nullptr)
     , pktSize(0)
     , pktNumber(0) {
 }
 
 Terminal::~Terminal() {
-
+    cancelAndDelete(procDelay);
 }
 
 void Terminal::initialize()
@@ -34,26 +35,31 @@ void Terminal::initialize()
 
 void Terminal::handleMessage(cMessage* msg)
 {
-    Pkt* pkt = check_and_cast<Pkt*>(msg);
-    if (pkt->isSelfMessage()) {
-        pkt->setGenTime(simTime());
-        send(pkt, "out");
-        pktNumber--;
-        if (pktNumber == 0)
-            getSimulation()->getSystemModule()->
-                getSubmodule("relay", 0)->unsubscribe(fwdSignal, this);
+    if (msg->isSelfMessage()) {
+        if (strcmp(getName(), "source") == 0) {
+            Pkt* pkt = check_and_cast<Pkt*>(msg);
+            pkt->setGenTime(simTime());
+            send(pkt, "out");
+            pktNumber--;
+            if (pktNumber == 0)
+                getSimulation()->getSystemModule()->
+                    getSubmodule("relay", 0)->unsubscribe(fwdSignal, this);
+        }
+        else {
+            EV << "Packet arrived at " << simTime() << " s" << endl;
+        }
     }
     else if (strcmp(getName(), "receptor") == 0) {
-        auto delay = simTime() - pkt->getGenTime() + processingDelay;
-        emit(arrivalSignal, delay);
-        EV << "Message " << pkt << " arrived after " 
-           << delay << " s.\n";
+        Pkt* pkt = check_and_cast<Pkt*>(msg);
+        procDelay = new cMessage("delay");
+        auto eedelay = simTime() - pkt->getGenTime() + processingDelay;
+        emit(arrivalSignal, eedelay);
+        scheduleAt(processingDelay + simTime(), procDelay);
         delete pkt;
     }
     else {
-        EV << "Droping packet from " << pkt->getName() << endl;
-        cancelAndDelete(pkt);
-        delete pkt;
+        EV << "Droping packet from " << msg->getName() << endl;
+        cancelAndDelete(msg);
     }
 }
 
