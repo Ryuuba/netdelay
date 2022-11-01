@@ -7,7 +7,7 @@ simsignal_t Relay::fwdSignal = registerSignal("fwd");
 Define_Module(Relay);
 
 Relay::Relay () 
-    : processingDelay(0.000005)
+    : processingDelay(0.0)
     , fwdTimer(nullptr)
     , packet(nullptr) {
 
@@ -19,6 +19,7 @@ Relay::~Relay() {
 
 void Relay::initialize() {
     fwdTimer = new cMessage("timer");
+    processingDelay = par("processingDelay");
 }
 
 void Relay::handleMessage(cMessage* msg) {
@@ -30,6 +31,6 @@ void Relay::handleMessage(cMessage* msg) {
     else {
         packet = check_and_cast<Pkt*>(msg);
         pktQueue.push(packet);
-        scheduleAt(processingDelay+simTime(), fwdTimer);
+        scheduleAt(processingDelay + simTime(), fwdTimer);
     }
 }
