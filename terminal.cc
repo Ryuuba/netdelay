@@ -8,22 +8,24 @@ simsignal_t Terminal::arrivalSignal = registerSignal("arrival");
 simsignal_t Terminal::fwdSignal = registerSignal("fwd");
 
 Terminal::Terminal()
-    : processingDelay(0.0000)
+    : processingDelay(0.0)
+    , pktSize(0)
     , pktNumber(0) {
 }
 
 Terminal::~Terminal() {
-    getSimulation()->getSystemModule()->getSubmodule("relay", 0)->unsubscribe(fwdSignal, this);
+
 }
 
 void Terminal::initialize()
 {
-    processingDelay = 0.000050;
+    processingDelay = par("processingDelay");
     if (strcmp(getName(), "source") == 0) {
-        getSimulation()->getSystemModule()->getSubmodule("relay", 0)->subscribe(fwdSignal, this);
+        getSimulation()->getSystemModule()
+            ->getSubmodule("relay", 0)->subscribe(fwdSignal, this);
         Pkt* pkt = new Pkt("pkt");
-        int pktSize = par("pktSize");
-        pkt->setBitLength(10000000);
+        pktSize = par("pktSize");
+        pkt->setBitLength(pktSize);
         pktNumber = par("pktNumber");
         pkt->setNumber(pktNumber);
         scheduleAt(0.0, pkt);
@@ -38,7 +40,8 @@ void Terminal::handleMessage(cMessage* msg)
         send(pkt, "out");
         pktNumber--;
         if (pktNumber == 0)
-            endSimulation();
+            getSimulation()->getSystemModule()->
+                getSubmodule("relay", 0)->unsubscribe(fwdSignal, this);
     }
     else if (strcmp(getName(), "receptor") == 0) {
         auto delay = simTime() - pkt->getGenTime() + processingDelay;
@@ -54,13 +57,11 @@ void Terminal::handleMessage(cMessage* msg)
     }
 }
 
-void Terminal::receiveSignal
-(omnetpp::cComponent* src, omnetpp::simsignal_t id, const omnetpp::SimTime& value, omnetpp::cObject* details) {
+void Terminal::receiveSignal(
+        omnetpp::cComponent* src, omnetpp::simsignal_t id, const omnetpp::SimTime& value, omnetpp::cObject* details
+) {
     Enter_Method_Silent();
-    EV << "Forwarding pkt number " << pktNumber << endl;
-    EV << "Receiving signal from " << src->getFullName() << endl;
     Pkt* pkt = new Pkt("pkt");
-    int pktSize = par("pktSize");
     pkt->setBitLength(pktSize);
     pkt->setNumber(pktNumber);
     scheduleAt(simTime(), pkt);

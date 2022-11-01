@@ -13,7 +13,8 @@ class Terminal
         static omnetpp::simsignal_t arrivalSignal;
         static omnetpp::simsignal_t fwdSignal;
         omnetpp::simtime_t processingDelay;
-    int pktNumber;
+        long pktSize;
+        long pktNumber;
     public:
         Terminal();
         ~Terminal();
